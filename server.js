@@ -24,15 +24,15 @@ app.post("/", (req, res) => {
   console.log(req.body);
   res.redirect("/");
 });
-app.get("/book", (req, res) => {
+app.get("/api/book", (req, res) => {
   console.log("someone GET This");
   res.send(book);
 });
-app.post("/book", (req, res) => {
+app.post("/api/book", (req, res) => {
   const bookObj = req.body;
   bookObj.index = book.length + 1;
   book.push(req.body);
-  console.log(book);
+  res.send(book);
 });
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "myapp/build/index.html"));
