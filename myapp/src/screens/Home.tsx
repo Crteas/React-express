@@ -8,21 +8,32 @@ interface Book {
 
 function Home() {
   const [books, setBook] = useState<Book[]>([]);
-  const [test, setTest] = useState("");
+  const [textInput, setTextInput] = useState("");
   const [nameInput, setNameInput] = useState("");
-  const url = "/book";
   const nodeURL = "http://localhost:4500/api/book";
 
   const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setNameInput(event.currentTarget.value);
   };
+  const handleChangeNameInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setTextInput(event.currentTarget.value);
+  };
 
   const postUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const name = (event.currentTarget[0] as HTMLInputElement).value;
+    if (name === "") return;
     const res = await axios.post(nodeURL, { name });
     setBook(res.data);
     setNameInput("");
+  };
+  const deleteUser = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const text = (event.currentTarget[0] as HTMLInputElement).value;
+    if (text === "") return;
+    const res = await axios.post(nodeURL + "/delete", { text });
+    setBook(res.data);
+    setTextInput("");
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -37,12 +48,22 @@ function Home() {
         <input
           type="text"
           name="name"
+          placeholder="Create"
           value={nameInput}
           onChange={handleChangeInput}
         />
         <button type="submit">선택</button>
       </form>
-
+      <form method="post" onSubmit={deleteUser}>
+        <input
+          type="text"
+          name="text"
+          placeholder="Delete Index"
+          value={textInput}
+          onChange={handleChangeNameInput}
+        />
+        <button type="submit">삭제</button>
+      </form>
       <div>
         {books.map((item) => <h1 key={item?.index}>{item?.name}</h1>).reverse()}
       </div>

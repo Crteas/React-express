@@ -9,30 +9,31 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "myapp/build")));
 
-const book = [
-  {
-    name: "hi",
-    index: 1,
-  },
-  {
-    name: "hi",
-    index: 2,
-  },
-];
+let book = [];
+let index = 0;
 
 app.post("/", (req, res) => {
   console.log(req.body);
-  res.redirect("/");
+  return res.redirect("/");
 });
 app.get("/api/book", (req, res) => {
   console.log("someone GET This");
-  res.send(book);
+  return res.send(book);
 });
 app.post("/api/book", (req, res) => {
   const bookObj = req.body;
-  bookObj.index = book.length + 1;
+  bookObj.index = index;
+  index++;
   book.push(req.body);
-  res.send(book);
+  return res.send(book);
+});
+app.post("/api/book/delete", (req, res) => {
+  const { text } = req.body;
+  if (book.length > 0) {
+    const result = book.filter((key) => key?.index !== Number(text));
+    book = result;
+  }
+  return res.send(book);
 });
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "myapp/build/index.html"));
