@@ -25,6 +25,7 @@ app.post("/api/book", (req, res) => {
   bookObj.index = index;
   index++;
   book.push(req.body);
+  console.log(book);
   return res.send(book);
 });
 app.post("/api/book/delete", (req, res) => {
@@ -34,6 +35,11 @@ app.post("/api/book/delete", (req, res) => {
     book = result;
   }
   return res.send(book);
+});
+app.get("/community/:id", (req, res) => {
+  const { id } = req.params;
+  const content = book.find((book) => book.index === Number(id));
+  return res.send(content);
 });
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "myapp/build/index.html"));
