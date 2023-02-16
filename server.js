@@ -22,6 +22,7 @@ app.get("/api/book", (req, res) => {
 });
 app.post("/api/book", (req, res) => {
   const bookObj = req.body;
+  console.log(bookObj);
   bookObj.index = index;
   index++;
   book.push(req.body);

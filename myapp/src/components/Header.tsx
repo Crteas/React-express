@@ -8,6 +8,7 @@ const Menu = styled.header`
   height: 50px;
   background-color: greenyellow;
   padding-left: 100px;
+  box-sizing: border-box;
 `;
 
 const MenuItem = styled.li`

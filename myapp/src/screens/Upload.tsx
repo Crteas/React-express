@@ -12,14 +12,15 @@ function UploadPage() {
   const postUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const name = (event.currentTarget[0] as HTMLInputElement).value;
+    const contents = (event.currentTarget[1] as HTMLInputElement).value;
     if (name === "") return;
-    await axios.post(nodeURL, { name });
+    await axios.post(nodeURL, { name, contents });
     setNameInput("");
     navigate("/");
   };
   return (
     <div>
-      <form method="post" onSubmit={postUser}>
+      <form id="postForm" method="post" onSubmit={postUser}>
         <input
           type="text"
           name="name"
@@ -27,6 +28,7 @@ function UploadPage() {
           value={nameInput}
           onChange={handleChangeInput}
         />
+        <textarea spellCheck="false" form="postForm" name="content" />
         <button type="submit">게시</button>
       </form>
     </div>
