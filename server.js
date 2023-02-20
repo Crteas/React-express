@@ -1,8 +1,18 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
+});
+
 const PORT = 4500;
 app.use(express.json());
 app.use(cors());
@@ -42,10 +52,22 @@ app.get("/community/:id", (req, res) => {
   const content = book.find((book) => book.index === Number(id));
   return res.send(content);
 });
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+  socket.on("click", (msg) => {
+    console.log("Who?" + msg);
+  });
+  socket.on("ping", () => {
+    io.emit("pong");
+  });
+});
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "myapp/build/index.html"));
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`MY APP LISTENING ON http://localhost:${PORT}`);
 });
