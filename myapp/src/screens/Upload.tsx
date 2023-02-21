@@ -18,6 +18,7 @@ function UploadPage() {
     setNameInput("");
     navigate("/");
   };
+  console.log(nameInput);
   return (
     <div>
       <form id="postForm" method="post" onSubmit={postUser}>
@@ -25,7 +26,7 @@ function UploadPage() {
           type="text"
           name="name"
           placeholder="Create"
-          value={nameInput}
+          /*value={nameInput}*/
           onChange={handleChangeInput}
         />
         <textarea spellCheck="false" form="postForm" name="content" />

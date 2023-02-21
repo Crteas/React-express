@@ -60,8 +60,14 @@ io.on("connection", (socket) => {
   socket.on("click", (msg) => {
     console.log("Who?" + msg);
   });
-  socket.on("ping", () => {
-    io.emit("pong");
+  socket.on("text", (msg) => {
+    console.log(msg);
+    socket.emit("serverSay", `나 : ${msg}`);
+    socket.to("1").emit("serverSay", `상대 : ${msg}`);
+  });
+  socket.on("joinRoom", (room) => {
+    socket.join(room);
+    console.log(socket.rooms);
   });
 });
 app.get("*", (req, res) => {
