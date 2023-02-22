@@ -9,7 +9,6 @@ function Book() {
   const [text, setText] = useState("");
   const [room, setRoom] = useState("");
   const [nickname, setNickname] = useState("");
-  const socketRef = useRef(a);
   useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);

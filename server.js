@@ -3,6 +3,8 @@ import path from "path";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+import "./db";
+import Book from "./models/Book";
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +21,7 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "myapp/build")));
 
+//fake DB
 let book = [];
 let index = 0;
 
@@ -26,8 +29,15 @@ app.post("/", (req, res) => {
   console.log(req.body);
   return res.redirect("/");
 });
-app.get("/api/book", (req, res) => {
+app.get("/api/book", async (req, res) => {
+  //DB뿌리기
   console.log("someone GET This");
+  const book = await Book.find({});
+  // Book.create({
+  //   name: "hello",
+  //   content: "hi bor",
+  // });
+  console.log(book);
   return res.send(book);
 });
 app.post("/api/book", (req, res) => {
@@ -52,6 +62,8 @@ app.get("/community/:id", (req, res) => {
   const content = book.find((book) => book.index === Number(id));
   return res.send(content);
 });
+
+//Socket IO for chat
 io.on("connection", (socket) => {
   console.log("a user connected");
   socket.on("disconnect", () => {
